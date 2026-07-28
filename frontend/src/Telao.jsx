@@ -6,7 +6,8 @@ function Telao() {
   useEffect(() => {
     // Função que busca os votos no back-end
     const buscarResultados = () => {
-      fetch("http://localhost:3000/api/resultados")
+      // CORREÇÃO: Usando a URL de produção do Render
+      fetch("https://noite-de-estrelas-dellut.onrender.com/api/resultados")
         .then((res) => res.json())
         .then((data) => setResultados(data))
         .catch((err) => console.error("Erro ao buscar telão:", err));

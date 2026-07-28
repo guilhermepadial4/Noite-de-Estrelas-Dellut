@@ -11,7 +11,8 @@ function Votacao() {
   const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/categorias")
+    // CORREÇÃO 1: Link limpo e com o final /api/categorias
+    fetch("https://noite-de-estrelas-dellut.onrender.com/api/categorias")
       .then((res) => res.json())
       .then((data) => setCategorias(data))
       .catch((err) => console.error("Erro ao buscar dados:", err));
@@ -31,11 +32,15 @@ function Votacao() {
 
     try {
       const promessas = Object.values(votos).map((indicadoId) => {
-        return fetch("http://localhost:3000/api/votos", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ indicado_id: indicadoId, votante: votante }),
-        });
+        // CORREÇÃO 2: Link limpo e com o final /api/votos
+        return fetch(
+          "https://noite-de-estrelas-dellut.onrender.com/api/votos",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ indicado_id: indicadoId, votante: votante }),
+          },
+        );
       });
 
       await Promise.all(promessas);

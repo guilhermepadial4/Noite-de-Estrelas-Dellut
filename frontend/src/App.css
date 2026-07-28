@@ -1,0 +1,116 @@
+/* Reseta algumas margens padrão */
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cabecalho {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.cabecalho h1 {
+  color: #d4af37; /* Dourado estilo Oscar */
+  margin-bottom: 5px;
+}
+
+.mensagem-sucesso {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.votante-card label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.votante-card input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.categoria-card h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+}
+
+.categoria-card p {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.indicados-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.indicado-opcao {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.indicado-opcao:hover {
+  background-color: #e2e6ea;
+}
+
+.indicado-opcao input[type="radio"] {
+  transform: scale(1.2);
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 15px;
+  background-color: #d4af37;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-enviar:hover {
+  background-color: #b5952f;
+}

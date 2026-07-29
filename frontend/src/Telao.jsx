@@ -1,49 +1,42 @@
 import { useState, useEffect } from "react";
+// 👇 Importando o logo aqui também
+import logoDellut from "./logo-dellut.png";
 
 function Telao() {
   const [resultados, setResultados] = useState({});
 
   useEffect(() => {
-    // Função que busca os votos no back-end
     const buscarResultados = () => {
-      // CORREÇÃO: Usando a URL de produção do Render
       fetch("https://noite-de-estrelas-dellut.onrender.com/api/resultados")
         .then((res) => res.json())
         .then((data) => setResultados(data))
         .catch((err) => console.error("Erro ao buscar telão:", err));
     };
 
-    // Busca na mesma hora em que a tela abre
     buscarResultados();
-
-    // Configura o "Ao Vivo": refaz a busca a cada 5 segundos
     const intervalo = setInterval(buscarResultados, 5000);
     return () => clearInterval(intervalo);
   }, []);
 
   return (
     <div className="telao-container">
+      <div className="telao-header">
+        <img src={logoDellut} alt="Dellut Engenharia" className="logo-dellut" />
+        <h1>Resultados ao Vivo 🏆</h1>
+      </div>
+
       {Object.keys(resultados).map((categoria) => (
-        <div key={categoria} className="card categoria-card">
+        <div key={categoria} className="telao-card">
           <h2>📊 {categoria}</h2>
           <div className="indicados-lista">
             {resultados[categoria].map((indicado, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "12px",
-                  backgroundColor: "#f8f9fa",
-                  border: "1px solid #e9ecef",
-                  borderRadius: "6px",
-                  marginBottom: "8px",
-                }}
-              >
-                <span style={{ fontSize: "18px", fontWeight: "500" }}>
+              <div key={index} className="resultado-item">
+                <span className="resultado-nome">
+                  {/* Se for o primeiro (index 0), coloca uma coroa */}
+                  {index === 0 ? "👑 " : ""}
                   {indicado.nome}
                 </span>
-                <strong style={{ fontSize: "18px", color: "#d4af37" }}>
+                <strong className="resultado-votos">
                   {indicado.votos} votos
                 </strong>
               </div>

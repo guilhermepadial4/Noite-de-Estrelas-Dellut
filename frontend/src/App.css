@@ -1,29 +1,145 @@
-/* Reseta algumas margens padrão */
-* {
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
+
+:root {
+  /* Cores baseadas no logo da Dellut */
+  --dellut-red: #e30613;
+  --dellut-dark-red: #9c1b22;
+  --dellut-grey: #4a4a49;
+  --bg-color: #f4f4f9;
+  --card-bg: #ffffff;
+  --gold: #d4af37;
 }
 
 body {
-  background-color: #f4f4f9;
-  color: #333;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--dellut-grey);
   margin: 0;
-  padding: 20px;
+  padding: 0;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
+  padding: 20px;
 }
 
+/* --- TELA DE VOTAÇÃO --- */
 .cabecalho {
   text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo-dellut {
+  max-width: 250px;
+  margin-bottom: 15px;
+}
+
+h1 {
+  color: var(--dellut-dark-red);
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.cabecalho p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 5px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid var(--dellut-red);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card h2 {
+  color: var(--dellut-dark-red);
+  margin-top: 0;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--dellut-red);
+  box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+}
+
+.indicados-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.indicado-opcao {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.indicado-opcao:hover {
+  border-color: var(--dellut-red);
+  background-color: #fff9f9;
+}
+
+.indicado-opcao input[type="radio"] {
+  margin-right: 15px;
+  accent-color: var(--dellut-red);
+  transform: scale(1.3);
+}
+
+.btn-enviar {
+  background: linear-gradient(
+    135deg,
+    var(--dellut-dark-red),
+    var(--dellut-red)
+  );
+  color: white;
+  border: none;
+  padding: 16px 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(227, 6, 19, 0.3);
+  transition: all 0.3s ease;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 10px;
   margin-bottom: 30px;
 }
 
-.cabecalho h1 {
-  color: #d4af37; /* Dourado estilo Oscar */
-  margin-bottom: 5px;
+.btn-enviar:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(227, 6, 19, 0.4);
 }
 
 .mensagem-sucesso {
@@ -32,85 +148,84 @@ body {
   padding: 15px;
   border-radius: 8px;
   text-align: center;
-  margin-bottom: 20px;
   font-weight: bold;
+  margin-bottom: 20px;
+  border-left: 5px solid #28a745;
 }
 
-.card {
-  background-color: white;
-  border-radius: 10px;
+/* --- TELA DO TELÃO --- */
+.telao-container {
+  max-width: 1000px;
+  margin: 40px auto;
   padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.votante-card label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 10px;
+.telao-header {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.votante-card input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+.telao-card {
+  background-color: var(--card-bg);
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border-left: 8px solid var(--dellut-dark-red);
 }
 
-.categoria-card h2 {
+.telao-card h2 {
+  color: var(--dellut-grey);
+  font-size: 1.8rem;
   margin-top: 0;
-  color: #2c3e50;
-  font-size: 20px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 10px;
-}
-
-.categoria-card p {
-  color: #7f8c8d;
-  font-size: 14px;
-}
-
-.indicados-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.indicado-opcao {
+  margin-bottom: 25px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px;
+}
+
+.resultado-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 25px;
   background-color: #f8f9fa;
   border: 1px solid #e9ecef;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
 }
 
-.indicado-opcao:hover {
-  background-color: #e2e6ea;
+/* Destaque para o 1º Colocado */
+.resultado-item:first-child {
+  background-color: #fffaf0;
+  border-color: var(--gold);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
 }
 
-.indicado-opcao input[type="radio"] {
-  transform: scale(1.2);
+.resultado-nome {
+  font-weight: 600;
+  color: var(--dellut-grey);
 }
 
-.btn-enviar {
-  width: 100%;
-  padding: 15px;
-  background-color: #d4af37;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.resultado-item:first-child .resultado-nome {
+  color: var(--gold);
+  font-size: 1.4rem;
 }
 
-.btn-enviar:hover {
-  background-color: #b5952f;
+.resultado-votos {
+  font-weight: 700;
+  color: var(--dellut-dark-red);
+  background-color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 2px solid var(--dellut-red);
+}
+
+.resultado-item:first-child .resultado-votos {
+  color: var(--gold);
+  border-color: var(--gold);
+  background-color: #fffaf0;
 }

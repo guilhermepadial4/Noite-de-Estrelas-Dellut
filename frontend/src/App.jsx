@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Telao from "./Telao";
 import "./App.css";
 
-// --- TELA DE VOTAÇÃO ---
+// 👇 Importando o logo que você salvou
+import logoDellut from "./logo-dellut.png";
+
 function Votacao() {
   const [categorias, setCategorias] = useState([]);
   const [votos, setVotos] = useState({});
@@ -11,7 +13,6 @@ function Votacao() {
   const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
-    // CORREÇÃO 1: Link limpo e com o final /api/categorias
     fetch("https://noite-de-estrelas-dellut.onrender.com/api/categorias")
       .then((res) => res.json())
       .then((data) => setCategorias(data))
@@ -32,7 +33,6 @@ function Votacao() {
 
     try {
       const promessas = Object.values(votos).map((indicadoId) => {
-        // CORREÇÃO 2: Link limpo e com o final /api/votos
         return fetch(
           "https://noite-de-estrelas-dellut.onrender.com/api/votos",
           {
@@ -57,14 +57,18 @@ function Votacao() {
   return (
     <div className="container">
       <header className="cabecalho">
-        <h1>🏆 Oscar Dellut 16 Anos</h1>
+        {/* 👇 Adicionando a imagem do logo */}
+        <img src={logoDellut} alt="Dellut Engenharia" className="logo-dellut" />
+        <h1>🏆 Oscar 16 Anos</h1>
         <p>Vote nos grandes destaques do ano!</p>
       </header>
 
       {mensagem && <div className="mensagem-sucesso">{mensagem}</div>}
       <form onSubmit={enviarVotos}>
         <div className="card votante-card">
-          <label>Identificação (Nome ou Setor):</label>
+          <label>
+            <strong>Identificação (Nome ou Setor):</strong>
+          </label>
           <input
             type="text"
             value={votante}
@@ -102,15 +106,11 @@ function Votacao() {
   );
 }
 
-// --- CONFIGURAÇÃO DAS ROTAS ---
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rota principal: O pessoal acessa normal para votar */}
         <Route path="/" element={<Votacao />} />
-
-        {/* Rota secreta: Apenas para o projetor/telão */}
         <Route path="/telao" element={<Telao />} />
       </Routes>
     </BrowserRouter>

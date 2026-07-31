@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Telao from "./Telao";
+import logoDellut from "./logo-dellut.png";
 import "./App.css";
 
-// 👇 Importando o logo que você salvou
-import logoDellut from "./logo-dellut.png";
-
+// --- TELA DE VOTAÇÃO ---
 function Votacao() {
   const [categorias, setCategorias] = useState([]);
   const [votos, setVotos] = useState({});
@@ -47,6 +46,11 @@ function Votacao() {
       setMensagem("Votos enviados com sucesso! 🎉");
       setVotos({});
       setVotante("");
+
+      // Limpa os campos de busca após o envio
+      const inputs = document.querySelectorAll(".input-busca");
+      inputs.forEach((input) => (input.value = ""));
+
       window.scrollTo(0, 0);
     } catch (error) {
       console.error("Erro ao enviar votos:", error);
@@ -57,7 +61,6 @@ function Votacao() {
   return (
     <div className="container">
       <header className="cabecalho">
-        {/* 👇 Adicionando a imagem do logo */}
         <img src={logoDellut} alt="Dellut Engenharia" className="logo-dellut" />
         <h1>🏆 Oscar 16 Anos</h1>
         <p>Vote nos grandes destaques do ano!</p>
@@ -82,20 +85,40 @@ function Votacao() {
           <div key={categoria.id} className="card categoria-card">
             <h2>{categoria.nome}</h2>
             <p>{categoria.descricao}</p>
-            <div className="indicados-lista">
-              {categoria.indicados.map((indicado) => (
-                <label key={indicado.id} className="indicado-opcao">
-                  <input
-                    type="radio"
-                    name={`categoria-${categoria.id}`}
-                    value={indicado.id}
-                    checked={votos[categoria.id] === indicado.id}
-                    onChange={() => handleVotoChange(categoria.id, indicado.id)}
-                  />
-                  <span>{indicado.nome}</span>
-                </label>
-              ))}
+
+            {/* --- NOVO CAMPO DE BUSCA COM DATALIST --- */}
+            <div className="busca-indicado" style={{ marginTop: "15px" }}>
+              <input
+                type="text"
+                list={`lista-${categoria.id}`}
+                placeholder="Clique aqui e pesquise o nome..."
+                className="input-busca"
+                onChange={(e) => {
+                  const nomeDigitado = e.target.value;
+                  // Procura na lista o indicado que tem exatamente esse nome
+                  const indicadoEncontrado = categoria.indicados.find(
+                    (ind) => ind.nome === nomeDigitado,
+                  );
+
+                  if (indicadoEncontrado) {
+                    handleVotoChange(categoria.id, indicadoEncontrado.id);
+                  } else {
+                    // Se o usuário apagar ou digitar errado, o voto temporário é removido
+                    const novosVotos = { ...votos };
+                    delete novosVotos[categoria.id];
+                    setVotos(novosVotos);
+                  }
+                }}
+              />
+
+              {/* O datalist cria a lista suspensa com filtro automático */}
+              <datalist id={`lista-${categoria.id}`}>
+                {categoria.indicados.map((indicado) => (
+                  <option key={indicado.id} value={indicado.nome} />
+                ))}
+              </datalist>
             </div>
+            {/* ---------------------------------------- */}
           </div>
         ))}
         <button type="submit" className="btn-enviar">
@@ -106,6 +129,7 @@ function Votacao() {
   );
 }
 
+// --- CONFIGURAÇÃO DAS ROTAS ---
 function App() {
   return (
     <BrowserRouter>

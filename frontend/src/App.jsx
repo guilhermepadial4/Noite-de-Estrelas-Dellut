@@ -75,8 +75,14 @@ function Votacao() {
     <div className="container">
       <header className="cabecalho">
         <img src={logoDellut} alt="Dellut Engenharia" className="logo-dellut" />
-        <h1>🏆 Prêmio Reconhecimento Dellut – 16 Anos</h1>
+        <h1>🏆 Prêmio Reconhecimento Dellut 16 Anos</h1>
         <p>Reconhecendo pessoas que constroem nossa história.</p>
+        <p>
+          <strong>
+            Na sua opinião, quem melhor representa cada um dos valores da
+            Dellut?
+          </strong>
+        </p>
       </header>
 
       {mensagem && <div className="mensagem-sucesso">{mensagem}</div>}

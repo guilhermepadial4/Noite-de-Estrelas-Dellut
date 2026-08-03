@@ -76,8 +76,8 @@ function Votacao() {
     <div className="container">
       <header className="cabecalho">
         <img src={logoDellut} alt="Dellut Engenharia" className="logo-dellut" />
-        <h1>🏆 Oscar 16 Anos</h1>
-        <p>Vote nos grandes destaques do ano!</p>
+        <h1>🏆 Prêmio Reconhecimento Dellut – 16 Anos</h1>
+        <p>Reconhecendo pessoas que constroem nossa história.</p>
       </header>
 
       {mensagem && <div className="mensagem-sucesso">{mensagem}</div>}

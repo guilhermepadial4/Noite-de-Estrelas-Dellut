@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
 :root {
-  /* Cores baseadas no logo da Dellut */
+  /* Paleta oficial Dellut Engenharia */
   --dellut-red: #e30613;
   --dellut-dark-red: #9c1b22;
   --dellut-grey: #4a4a49;
@@ -24,14 +24,16 @@ body {
   padding: 20px;
 }
 
-/* --- TELA DE VOTAÇÃO --- */
+/* ====================================================
+   TELA DE VOTAÇÃO (CELULAR / SALÃO)
+==================================================== */
 .cabecalho {
   text-align: center;
   margin-bottom: 40px;
 }
 
 .logo-dellut {
-  max-width: 250px;
+  max-width: 230px;
   margin-bottom: 15px;
 }
 
@@ -69,7 +71,20 @@ h1 {
   font-size: 1.4rem;
 }
 
-input[type="text"] {
+.votante-card label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  color: var(--dellut-grey);
+}
+
+/* --- CAMPO DE BUSCA INTELIGENTE --- */
+.busca-indicado {
+  position: relative;
+  margin-top: 15px;
+}
+
+.input-busca {
   width: 100%;
   padding: 15px;
   border: 1px solid #ccc;
@@ -77,45 +92,58 @@ input[type="text"] {
   font-size: 1rem;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
 }
 
-input[type="text"]:focus {
+.input-busca:focus {
   outline: none;
   border-color: var(--dellut-red);
-  box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.12);
 }
 
-.indicados-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.indicado-opcao {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background-color: #fafafa;
+/* --- LISTA SUSPENSA CUSTOMIZADA (FLUTUANTE) --- */
+.lista-suspensa {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 230px;
+  overflow-y: auto;
+  background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
+  z-index: 1000;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.lista-suspensa li {
+  padding: 14px 18px;
+  border-bottom: 1px solid #f0f0f0;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 600;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+  color: var(--dellut-grey);
+  font-weight: 500;
+  font-size: 0.98rem;
 }
 
-.indicado-opcao:hover {
-  border-color: var(--dellut-red);
-  background-color: #fff9f9;
+.lista-suspensa li:last-child {
+  border-bottom: none;
 }
 
-.indicado-opcao input[type="radio"] {
-  margin-right: 15px;
-  accent-color: var(--dellut-red);
-  transform: scale(1.3);
+.lista-suspensa li:hover,
+.lista-suspensa li:active {
+  background-color: var(--dellut-red);
+  color: white;
 }
 
+/* --- BOTÃO DE ENVIAR E MENSAGENS --- */
 .btn-enviar {
   background: linear-gradient(
     135deg,
@@ -134,26 +162,29 @@ input[type="text"]:focus {
   transition: all 0.3s ease;
   font-family: "Montserrat", sans-serif;
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .btn-enviar:hover {
   transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(227, 6, 19, 0.4);
+  box-shadow: 0 6px 20px rgba(227, 6, 19, 0.45);
 }
 
 .mensagem-sucesso {
   background-color: #d4edda;
   color: #155724;
-  padding: 15px;
+  padding: 16px;
   border-radius: 8px;
   text-align: center;
-  font-weight: bold;
-  margin-bottom: 20px;
-  border-left: 5px solid #28a745;
+  font-weight: 600;
+  margin-bottom: 25px;
+  border-left: 6px solid #28a745;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* --- TELA DO TELÃO --- */
+/* ====================================================
+   TELA DO TELÃO / PROJETOR (ROTA /telao)
+==================================================== */
 .telao-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -197,12 +228,12 @@ input[type="text"]:focus {
   transition: all 0.3s ease;
 }
 
-/* Destaque para o 1º Colocado */
+/* Destaque especial em dourado para o 1º Colocado */
 .resultado-item:first-child {
   background-color: #fffaf0;
   border-color: var(--gold);
   transform: scale(1.02);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.22);
 }
 
 .resultado-nome {
@@ -213,6 +244,7 @@ input[type="text"]:focus {
 .resultado-item:first-child .resultado-nome {
   color: var(--gold);
   font-size: 1.4rem;
+  font-weight: 700;
 }
 
 .resultado-votos {

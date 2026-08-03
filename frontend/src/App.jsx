@@ -8,6 +8,8 @@ import "./App.css";
 function Votacao() {
   const [categorias, setCategorias] = useState([]);
   const [votos, setVotos] = useState({});
+  const [textosBusca, setTextosBusca] = useState({}); // O que a pessoa digitou
+  const [listasAbertas, setListasAbertas] = useState({}); // Controla se a lista está visível
   const [votante, setVotante] = useState("");
   const [mensagem, setMensagem] = useState("");
 
@@ -18,15 +20,29 @@ function Votacao() {
       .catch((err) => console.error("Erro ao buscar dados:", err));
   }, []);
 
-  const handleVotoChange = (categoriaId, indicadoId) => {
-    setVotos({ ...votos, [categoriaId]: indicadoId });
+  // FUNÇÃO MÁGICA: Remove acentos e deixa tudo minúsculo
+  const removerAcentos = (texto) => {
+    if (!texto) return "";
+    return texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  };
+
+  const handleSelecionar = (categoriaId, indicado) => {
+    // Salva o voto oficial
+    setVotos({ ...votos, [categoriaId]: indicado.id });
+    // Preenche a barra com o nome bonito
+    setTextosBusca({ ...textosBusca, [categoriaId]: indicado.nome });
+    // Fecha a lista suspensa
+    setListasAbertas({ ...listasAbertas, [categoriaId]: false });
   };
 
   const enviarVotos = async (e) => {
     e.preventDefault();
 
     if (Object.keys(votos).length !== categorias.length) {
-      alert("Por favor, vote em todas as categorias antes de enviar!");
+      alert("Por favor, selecione um indicado em TODAS as categorias!");
       return;
     }
 
@@ -44,13 +60,11 @@ function Votacao() {
 
       await Promise.all(promessas);
       setMensagem("Votos enviados com sucesso! 🎉");
+
+      // Limpa tudo depois de enviar
       setVotos({});
+      setTextosBusca({});
       setVotante("");
-
-      // Limpa os campos de busca após o envio
-      const inputs = document.querySelectorAll(".input-busca");
-      inputs.forEach((input) => (input.value = ""));
-
       window.scrollTo(0, 0);
     } catch (error) {
       console.error("Erro ao enviar votos:", error);
@@ -78,49 +92,79 @@ function Votacao() {
             onChange={(e) => setVotante(e.target.value)}
             placeholder="Ex: João da Engenharia"
             required
+            className="input-busca"
           />
         </div>
 
-        {categorias.map((categoria) => (
-          <div key={categoria.id} className="card categoria-card">
-            <h2>{categoria.nome}</h2>
-            <p>{categoria.descricao}</p>
+        {categorias.map((categoria) => {
+          // Filtra a lista comparando o nome sem acento com o que foi digitado sem acento
+          const indicadosFiltrados = categoria.indicados.filter((ind) =>
+            removerAcentos(ind.nome).includes(
+              removerAcentos(textosBusca[categoria.id]),
+            ),
+          );
 
-            {/* --- NOVO CAMPO DE BUSCA COM DATALIST --- */}
-            <div className="busca-indicado" style={{ marginTop: "15px" }}>
-              <input
-                type="text"
-                list={`lista-${categoria.id}`}
-                placeholder="Clique aqui e pesquise o nome..."
-                className="input-busca"
-                onChange={(e) => {
-                  const nomeDigitado = e.target.value;
-                  // Procura na lista o indicado que tem exatamente esse nome
-                  const indicadoEncontrado = categoria.indicados.find(
-                    (ind) => ind.nome === nomeDigitado,
-                  );
+          return (
+            <div key={categoria.id} className="card categoria-card">
+              <h2>{categoria.nome}</h2>
+              <p>{categoria.descricao}</p>
 
-                  if (indicadoEncontrado) {
-                    handleVotoChange(categoria.id, indicadoEncontrado.id);
-                  } else {
-                    // Se o usuário apagar ou digitar errado, o voto temporário é removido
+              <div className="busca-indicado">
+                <input
+                  type="text"
+                  className="input-busca"
+                  placeholder="Toque aqui e digite o nome..."
+                  value={textosBusca[categoria.id] || ""}
+                  onChange={(e) => {
+                    const digitado = e.target.value;
+                    setTextosBusca({
+                      ...textosBusca,
+                      [categoria.id]: digitado,
+                    });
+                    setListasAbertas({
+                      ...listasAbertas,
+                      [categoria.id]: true,
+                    });
+
+                    // Se a pessoa mexer no texto, apaga o voto que estava salvo
                     const novosVotos = { ...votos };
                     delete novosVotos[categoria.id];
                     setVotos(novosVotos);
+                  }}
+                  onFocus={() =>
+                    setListasAbertas({ ...listasAbertas, [categoria.id]: true })
                   }
-                }}
-              />
+                  onBlur={() => {
+                    // Atraso de 200ms para dar tempo do celular registrar o toque na lista
+                    setTimeout(() => {
+                      setListasAbertas((prev) => ({
+                        ...prev,
+                        [categoria.id]: false,
+                      }));
+                    }, 200);
+                  }}
+                />
 
-              {/* O datalist cria a lista suspensa com filtro automático */}
-              <datalist id={`lista-${categoria.id}`}>
-                {categoria.indicados.map((indicado) => (
-                  <option key={indicado.id} value={indicado.nome} />
-                ))}
-              </datalist>
+                {/* Nossa lista suspensa inteligente customizada */}
+                {listasAbertas[categoria.id] &&
+                  indicadosFiltrados.length > 0 && (
+                    <ul className="lista-suspensa">
+                      {indicadosFiltrados.map((indicado) => (
+                        <li
+                          key={indicado.id}
+                          onMouseDown={() =>
+                            handleSelecionar(categoria.id, indicado)
+                          }
+                        >
+                          {indicado.nome}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+              </div>
             </div>
-            {/* ---------------------------------------- */}
-          </div>
-        ))}
+          );
+        })}
         <button type="submit" className="btn-enviar">
           Confirmar Votos
         </button>

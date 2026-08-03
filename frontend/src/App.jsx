@@ -8,9 +8,8 @@ import "./App.css";
 function Votacao() {
   const [categorias, setCategorias] = useState([]);
   const [votos, setVotos] = useState({});
-  const [textosBusca, setTextosBusca] = useState({}); // O que a pessoa digitou
-  const [listasAbertas, setListasAbertas] = useState({}); // Controla se a lista está visível
-  const [votante, setVotante] = useState("");
+  const [textosBusca, setTextosBusca] = useState({});
+  const [listasAbertas, setListasAbertas] = useState({});
   const [mensagem, setMensagem] = useState("");
 
   useEffect(() => {
@@ -20,7 +19,7 @@ function Votacao() {
       .catch((err) => console.error("Erro ao buscar dados:", err));
   }, []);
 
-  // FUNÇÃO MÁGICA: Remove acentos e deixa tudo minúsculo
+  // Função que remove acentos para a busca inteligente
   const removerAcentos = (texto) => {
     if (!texto) return "";
     return texto
@@ -30,11 +29,8 @@ function Votacao() {
   };
 
   const handleSelecionar = (categoriaId, indicado) => {
-    // Salva o voto oficial
     setVotos({ ...votos, [categoriaId]: indicado.id });
-    // Preenche a barra com o nome bonito
     setTextosBusca({ ...textosBusca, [categoriaId]: indicado.nome });
-    // Fecha a lista suspensa
     setListasAbertas({ ...listasAbertas, [categoriaId]: false });
   };
 
@@ -53,7 +49,11 @@ function Votacao() {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ indicado_id: indicadoId, votante: votante }),
+            // Enviando "Anônimo" automaticamente para o banco de dados
+            body: JSON.stringify({
+              indicado_id: indicadoId,
+              votante: "Anônimo",
+            }),
           },
         );
       });
@@ -61,10 +61,9 @@ function Votacao() {
       await Promise.all(promessas);
       setMensagem("Votos enviados com sucesso! 🎉");
 
-      // Limpa tudo depois de enviar
+      // Limpa os campos depois de enviar
       setVotos({});
       setTextosBusca({});
-      setVotante("");
       window.scrollTo(0, 0);
     } catch (error) {
       console.error("Erro ao enviar votos:", error);
@@ -81,23 +80,9 @@ function Votacao() {
       </header>
 
       {mensagem && <div className="mensagem-sucesso">{mensagem}</div>}
-      <form onSubmit={enviarVotos}>
-        <div className="card votante-card">
-          <label>
-            <strong>Identificação (Nome ou Setor):</strong>
-          </label>
-          <input
-            type="text"
-            value={votante}
-            onChange={(e) => setVotante(e.target.value)}
-            placeholder="Ex: João da Engenharia"
-            required
-            className="input-busca"
-          />
-        </div>
 
+      <form onSubmit={enviarVotos}>
         {categorias.map((categoria) => {
-          // Filtra a lista comparando o nome sem acento com o que foi digitado sem acento
           const indicadosFiltrados = categoria.indicados.filter((ind) =>
             removerAcentos(ind.nome).includes(
               removerAcentos(textosBusca[categoria.id]),
@@ -126,7 +111,6 @@ function Votacao() {
                       [categoria.id]: true,
                     });
 
-                    // Se a pessoa mexer no texto, apaga o voto que estava salvo
                     const novosVotos = { ...votos };
                     delete novosVotos[categoria.id];
                     setVotos(novosVotos);
@@ -135,7 +119,6 @@ function Votacao() {
                     setListasAbertas({ ...listasAbertas, [categoria.id]: true })
                   }
                   onBlur={() => {
-                    // Atraso de 200ms para dar tempo do celular registrar o toque na lista
                     setTimeout(() => {
                       setListasAbertas((prev) => ({
                         ...prev,
@@ -145,7 +128,6 @@ function Votacao() {
                   }}
                 />
 
-                {/* Nossa lista suspensa inteligente customizada */}
                 {listasAbertas[categoria.id] &&
                   indicadosFiltrados.length > 0 && (
                     <ul className="lista-suspensa">

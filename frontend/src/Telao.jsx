@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-// 👇 Importando o logo aqui também
 import logoDellut from "./logo-dellut.png";
 
 function Telao() {
@@ -29,18 +28,22 @@ function Telao() {
         <div key={categoria} className="telao-card">
           <h2>📊 {categoria}</h2>
           <div className="indicados-lista">
-            {resultados[categoria].map((indicado, index) => (
-              <div key={index} className="resultado-item">
-                <span className="resultado-nome">
-                  {/* Se for o primeiro (index 0), coloca uma coroa */}
-                  {index === 0 ? "👑 " : ""}
-                  {indicado.nome}
-                </span>
-                <strong className="resultado-votos">
-                  {indicado.votos} votos
-                </strong>
-              </div>
-            ))}
+            {/* Aqui a mágica acontece: Ordenamos por votos e pegamos apenas o Top 5 */}
+            {resultados[categoria]
+              .sort((a, b) => b.votos - a.votos)
+              .slice(0, 5)
+              .map((indicado, index) => (
+                <div key={index} className="resultado-item">
+                  <span className="resultado-nome">
+                    {/* Se for o primeiro (index 0), coloca uma coroa */}
+                    {index === 0 ? "👑 " : ""}
+                    {indicado.nome}
+                  </span>
+                  <strong className="resultado-votos">
+                    {indicado.votos} votos
+                  </strong>
+                </div>
+              ))}
           </div>
         </div>
       ))}
